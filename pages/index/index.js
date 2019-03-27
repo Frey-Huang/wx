@@ -37,7 +37,6 @@ const pageData = {
         isDisposed: false
     },
     onLoad(func) {
-
         wx.getLocation({
             success: res => {
                 console.log(res)
@@ -119,7 +118,7 @@ const pageData = {
                         humidity: parseInt(result.humidity * 100) || '-',
                         pm25: parseInt(result.pm25),
                         skycon: result.skycon || '-',
-                        temperature: parseInt(result.temperature)+'℃',
+                        temperature: parseInt(result.temperature) + '℃',
                         weatherIcon: weatherIcon[result.skycon]
                     })
                 }
@@ -333,7 +332,6 @@ const pageData = {
         })
     },
     touchMove() {},
-
 
     onPullDownRefresh() {
         this.onLoad(wx.stopPullDownRefresh)
