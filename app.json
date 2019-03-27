@@ -1,11 +1,11 @@
 {
   "pages": [
-    "pages/today/index"
+    "pages/index/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#000",
-    "navigationBarTitleText": "气象小站",
+    "navigationBarTitleText": "云图",
     "navigationBarTextStyle": "white"
   }
 }

@@ -1,0 +1,35 @@
+<!-- index.wxml -->
+<view class="container">
+    <!-- <view class="weather-bg">
+        <view style="position: relative; width: 100%; height: auto">
+            <image class="weather-bg-img" src="{{weatherBg}}" mode="widthFix"></image>
+            <view class="weather-bg-transit"></view>
+        </view>
+    </view> -->
+    <view class="local" bindtap="reLocation">
+        <text class="tip-icon i-weather-font icon-location"></text>
+        <text>{{locationName}}</text>
+    </view>
+    <view class="today-temperature" >
+        <text>{{temperature}}</text>
+    </view>
+    <view class="today-forecast">
+        <text>{{todayForeCast}}</text>
+    </view>
+    <view class="precipitation-view" bindtap="reLocation">
+        <ec-canvas id="precipitation-canvas" canvas-id="precipitationCanvas" ec="{{ ec }}"></ec-canvas>
+    </view>
+    <scroll-view scroll-x="true" class="week-forecast">
+        <view class="item"  wx:for="{{week}}">
+            <view>
+                <text>{{item.day}}</text>
+            </view>
+            <view>
+                <text class="i-weather-font {{item.skycon}}"></text>
+            </view>
+            <view>
+                <text>{{item.temperature}}</text>
+            </view>
+        </view>
+    </scroll-view>
+</view>

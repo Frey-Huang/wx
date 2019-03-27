@@ -26,7 +26,10 @@ text{
 .height {
     height: 100%;
 }
-
+ec-canvas {
+    width: 750rpx;
+    height: 560rpx;
+}
 .background {
     background-image: url('https://s14.postimg.cc/ksvigrmip/80lb-_Smooth-_White.jpg');
     background-size: 100% 100%;
@@ -98,28 +101,26 @@ text{
 
 .today-temperature {
     text-align: center;
-    font-size: 300rpx;
+    font-size: 100rpx;
     line-height: 1;
 }
 
 .today-forecast {
     text-align: center;
-    font-size: 30rpx;
+    font-size: 20rpx;
+    color: #333;
+    margin-bottom: 30rpx;
 }
 .precipitation-view{
-    margin: 25rpx auto;
-    width: 700rpx;
-    height: 250rpx;
-    overflow: hidden;
+    padding-top: 20rpx;
+    box-sizing: border-box;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     position: relative;
+    width: 750rpx;
+    height: 460rpx;
 }
-.precipitation-canvas{
-    margin: 25rpx auto;
-    width: 700rpx;
-    height: 250rpx;
-    overflow: hidden;
-    position: fixed;
-}
+
 
 .icon-location:before {
     content: '\e652';

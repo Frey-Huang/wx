@@ -10,10 +10,10 @@
 		"minified": true,
 		"newFeature": true
 	},
-	"compileType": "miniprogram",
-	"libVersion": "1.9.98",
-	"appid": "wx68a5338d311458db",
-	"projectname": "%E5%B0%8F%E7%A8%8B%E5%BA%8F",
+	"compileType": "funny",
+	"libVersion": "2.0.0",
+	"appid": "wx44167e573301f026",
+	"projectname": "%E4%BA%91%E5%9B%BE",
 	"isGameTourist": false,
 	"condition": {
 		"search": {
