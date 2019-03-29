@@ -1,18 +1,30 @@
 //index.js
 //获取应用实例
 
-import * as echarts from '../../ec-canvas/echarts'
+import initChart from './weatherChart'
+// import run from './getRunData'
 const app = getApp()
 const weatherIcon = {
-    CLEAR_DAY: 'icon-sun', //晴天
-    CLEAR_NIGHT: 'icon-moon', //晴夜
-    PARTLY_CLOUDY_DAY: 'icon-cloud', //多云
-    PARTLY_CLOUDY_NIGHT: 'icon-cloud-night', //多云
-    CLOUDY: 'icon-cloud', //阴
-    RAIN: 'icon-rain', //雨
-    SNOW: 'icon-snow', //雪
-    WIND: 'icon-wind', //风
-    FOG: 'icon-fog' //雾
+    CLEAR_DAY: 'icon-CLEAR_DAY', //晴天
+    CLEAR_NIGHT: 'icon-CLEAR_NIGHT', //晴夜
+    PARTLY_CLOUDY_DAY: 'icon-PARTLY_CLOUDY_DAY', //多云
+    PARTLY_CLOUDY_NIGHT: 'icon-PARTLY_CLOUDY_NIGHT', //多云
+    CLOUDY: 'icon-CLOUDY', //阴
+    LIGHT_HAZE: 'icon-HAZE', //	PM2.5 100~150
+    MODERATE_HAZE: 'icon-HAZE', //PM2.5 150~200
+    HEAVY_HAZE: 'icon-HAZE', //PM2.5 > 200
+    LIGHT_RAIN: 'icon-LIGHT_RAIN', //小雨
+    MODERATE_RAIN: 'icon-MODERATE_RAIN', //中雨
+    HEAVY_RAIN: 'icon-HEAVY_RAIN', //大雨
+    STORM_RAIN: 'icon-STORM_RAIN', //暴雨
+    FOG: 'icon-FOG', //	雾
+    LIGHT_SNOW: 'icon-LIGHT_SNOW', //小雪
+    MODERATE_SNOW: 'icon-MODERATE_SNOW', //中雪
+    HEAVY_SNOW: 'icon-HEAVY_SNOW', //大雪
+    STORM_SNOW: 'icon-STORM_SNOW', //暴雪
+    DUST: 'icon-DUST', //浮尘	aqi > 150，pm10 > 150，湿度 < 30%，风速 < 6 m/s
+    SAND: 'icon-SAND', //沙尘	aqi > 150，pm10 > 150，湿度 < 30%，风速 > 6 m/s
+    WIND: 'icon-WIND' //大风
 }
 const pageData = {
     data: {
@@ -34,7 +46,10 @@ const pageData = {
             lazyLoad: true
         },
         isLoaded: false,
-        isDisposed: false
+        isDisposed: false,
+        audiosrc: '',
+        audioImg: '',
+        audioStatus: 0
     },
     onLoad(func) {
         wx.getLocation({
@@ -51,6 +66,7 @@ const pageData = {
                 this.getLocationName()
                 this.getWeather()
                 this.getForeCast()
+                this.getplaylist()
                 func && typeof func === 'function' && func()
             },
             fail() {
@@ -100,7 +116,6 @@ const pageData = {
                         addressComponent.street +
                         addressComponent.street_number
                 })
-                console.log('baidu', res)
             }
         })
     },
@@ -108,18 +123,20 @@ const pageData = {
         const self = this
         const { longitude, latitude } = self.data.location || {}
         wx.request({
-            url: `https://api.caiyunapp.com/v2.3/q2aRqYc6gf196Zcf/${longitude},${latitude}/realtime.json`,
+            url: `https://api.caiyunapp.com/v2.4/q2aRqYc6gf196Zcf/${longitude},${latitude}/realtime.json`,
             data: {},
             success(res) {
-                console.log('caiyunapp success', res)
                 if (res.statusCode === 200) {
                     const result = (res.data && res.data.result) || {}
+
                     self.setData({
-                        humidity: parseInt(result.humidity * 100) || '-',
-                        pm25: parseInt(result.pm25),
-                        skycon: result.skycon || '-',
-                        temperature: parseInt(result.temperature) + '℃',
-                        weatherIcon: weatherIcon[result.skycon]
+                        humidity:
+                            parseInt(result.realtime.humidity * 100) || '-',
+                        pm25: parseInt(result.realtime.pm25),
+                        skycon: result.realtime.skycon || '-',
+                        temperature:
+                            parseInt(result.realtime.temperature) + '℃',
+                        weatherIcon: weatherIcon[result.realtime.skycon]
                     })
                 }
             },
@@ -132,197 +149,16 @@ const pageData = {
         const { longitude, latitude } = this.data.location || {}
         const ecComponent = this.selectComponent('#precipitation-canvas')
         wx.request({
-            url: `https://api.caiyunapp.com/v2.3/q2aRqYc6gf196Zcf/${longitude},${latitude}/hourly.json`,
+            url: `https://api.caiyunapp.com/v2.4/q2aRqYc6gf196Zcf/${longitude},${latitude}/hourly.json`,
             data: {},
             success: res => {
-                const timeData = []
-                const temps = []
-                const perc = []
                 const result = res.data.result
                 this.setData({
                     foreCast: result.hourly.description,
                     todayForeCast: result.forecast_keypoint
                 })
-                const temperature = result.hourly.temperature
-
-                temperature.forEach(temp => {
-                    const timestamp = new Date(temp.datetime).getTime()
-                    timeData.push([timestamp, temp.value])
-                    temps.push(temp.value)
-                })
-
-                const precipitation = result.hourly.precipitation
-                precipitation.forEach(item => {
-                    const timestamp = new Date(item.datetime).getTime()
-                    perc.push([timestamp, item.value])
-                })
-
-                // console.log(time,temps)
-                function initChart(canvas, width, height) {
-                    const chart = echarts.init(canvas, null, {
-                        width: width,
-                        height: height
-                    })
-                    canvas.setChart(chart)
-                    const option = {
-                        title: {
-                            text: '未来48小时气温变化',
-                            textStyle: {
-                                fontSize: 12,
-                                color: '#333'
-                            }
-                        },
-
-                        axisPointer: {
-                            link: { xAxisIndex: 'all' },
-                            label: {
-                                backgroundColor: '#777'
-                            }
-                        },
-                        textStyle: {
-                            fontSize: 8
-                        },
-                        brush: {
-                            xAxisIndex: 'all',
-                            brushLink: 'all',
-                            outOfBrush: {
-                                colorAlpha: 0.1
-                            }
-                        },
-                        grid: [
-                            {
-                                left: '6%',
-                                right: '6%',
-                                height: '50%'
-                            }
-                        ],
-                        legend: {
-                            data: ['最高气温', '最低气温']
-                        },
-                        toolbox: {
-                            show: false
-                        },
-                        xAxis: [
-                            {
-                                type: 'time',
-                                boundaryGap: false,
-                                splitNumber: 8,
-
-                                axisLabel: {
-                                    formatter: (value, index) => {
-                                        var date = new Date(value)
-                                        var texts = [
-                                            (date.getHours() < 10
-                                                ? '0' + date.getHours()
-                                                : date.getHours()) + '时',
-                                            date.getDate() + '日'
-                                        ]
-                                        return texts.join('\n')
-                                    },
-                                    fontSize: 8,
-                                    padding: 0
-                                },
-                                axisTick: {
-                                    length: 2
-                                }
-                            }
-                        ],
-                        yAxis: [
-                            {
-                                type: 'value',
-                                name: '温度℃',
-                                scale: true,
-                                axisLabel: {
-                                    formatter: '{value}',
-                                    fontSize: 8,
-                                    padding: 0
-                                },
-                                axisTick: {
-                                    show: false
-                                }
-                            },
-                            {
-                                type: 'value',
-                                name: '降雨量',
-                                position: 'right',
-                                axisLabel: {
-                                    formatter: '{value}',
-                                    fontSize: 8,
-                                    padding: 0
-                                },
-                                axisTick: {
-                                    show: false
-                                },
-                                splitLine: {
-                                    show: false
-                                },
-                                min: 0,
-                                max: 1
-                            }
-                        ],
-
-                        series: [
-                            {
-                                name: '气温',
-                                type: 'line',
-                                data: timeData,
-                                markPoint: {
-                                    data: [
-                                        { type: 'max', name: '最大值' },
-                                        { type: 'min', name: '最小值' }
-                                    ],
-                                    symbolSize: 30,
-                                    label: {
-                                        fontSize: 8,
-                                        formatter: _label =>
-                                            Math.round(_label.value)
-                                    }
-                                },
-                                markLine: {
-                                    data: [{ type: 'average', name: '平均值' }],
-                                    label: {
-                                        position: 'middle',
-                                        fontSize: 8
-                                        // offset: -100
-                                    }
-                                }
-                            },
-                            {
-                                name: '降雨量',
-                                type: 'bar',
-                                // barWidth: '60%',
-                                data: perc,
-                                markPoint: {
-                                    data: [{ type: 'max', name: '最大值' }],
-                                    symbolSize: 30,
-                                    label: {
-                                        fontSize: 8
-                                    }
-                                },
-                                yAxisIndex: 1
-                            }
-                        ],
-                        color: [
-                            'rgb(79,134,189)',
-                            '#CCCCFF',
-                            '#61a0a8',
-                            '#d48265',
-                            '#91c7ae',
-                            '#749f83',
-                            '#ca8622',
-                            '#bda29a',
-                            '#6e7074',
-                            '#546570',
-                            '#c4ccd3'
-                        ]
-                    }
-
-                    chart.setOption(option)
-                    return chart
-                }
                 ecComponent.init((canvas, width, height) => {
-                    this.chart = initChart(canvas, width, height)
-
+                    this.chart = initChart(canvas, width, height, result)
                     this.setData({
                         isLoaded: true,
                         isDisposed: false
@@ -331,8 +167,88 @@ const pageData = {
             }
         })
     },
-    touchMove() {},
+    getplaylist() {
+        wx.request({
+            url:
+                'https://musicapi.leanapp.cn/search?keywords=%E9%98%B4%E5%A4%A9&type=1000',
+            success: res => {
+                const result = res.data.result
+                const alumbList =
+                    result.playlists[
+                        Math.floor(Math.random() * result.playlists.length)
+                    ]
+                wx.request({
+                    url:
+                        'https://musicapi.leanapp.cn/playlist/detail?id=' +
+                        alumbList.id,
+                    success: musicListRes => {
+                        this.getMusic(musicListRes)
+                    }
+                })
+            },
+            fail: err => {
+                console.log('err', err)
+            }
+        })
+        // const WxRunecComponent = this.selectComponent('#wxrun-canvas')
+        // WxRunecComponent.init((canvas, width, height) => {
+        //     this.chart = initChart(canvas, width, height, result)
+        // })
+    },
+    getMusic(musicListRes) {
+        const musicList = musicListRes.data.playlist
+        const randomNum = Math.floor(Math.random() * musicList.trackCount)
+        const musicid = musicList.trackIds[randomNum].id
 
+        const md = {
+            id: musicid,
+            pic: musicList.tracks[randomNum].al.picUrl.replace(/http:\/\//,'https://'),
+            name: musicList.tracks[randomNum].al.name
+        }
+        this.setData({
+            audioImg: md.pic
+        })
+        console.log(md)
+        wx.request({
+            url: 'https://musicapi.leanapp.cn/music/url?id=' + md.id,
+            success: detail => {
+                if (detail.data.data[0].url) {
+                    this.setData({
+                        audiosrc: detail.data.data[0].url
+                    })
+                    this.audioCtx = wx.createAudioContext('myAudio')
+                    this.audioCtx.setSrc(detail.data.data[0].url)
+                    this.audioCtx.play()
+                    this.setData({
+                        audioStatus: 1
+                    })
+                } else {
+                    this.getMusic(musicListRes)
+                }
+            }
+        })
+    },
+    audioControl() {
+        if (this.data.audioStatus) {
+            this.setData({
+                audioStatus: 0
+            })
+            this.audioPause()
+        } else {
+            this.setData({
+                audioStatus: 1
+            })
+            this.audioPlay()
+        }
+    },
+    audioPlay() {
+        console.log(1)
+        this.audioCtx.play()
+    },
+    audioPause() {
+        this.audioCtx.pause()
+    },
+    touchMove() {},
     onPullDownRefresh() {
         this.onLoad(wx.stopPullDownRefresh)
     }

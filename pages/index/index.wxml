@@ -10,16 +10,23 @@
         <text class="tip-icon i-weather-font icon-location"></text>
         <text>{{locationName}}</text>
     </view>
-    <view class="today-temperature" >
+    <view class="today-temperature i-weather-font {{weatherIcon}}" >
         <text>{{temperature}}</text>
     </view>
-    <view class="today-forecast">
+    <view class="today-forecast ">
         <text>{{todayForeCast}}</text>
     </view>
     <view class="precipitation-view" bindtap="reLocation">
         <ec-canvas id="precipitation-canvas" canvas-id="precipitationCanvas" ec="{{ ec }}"></ec-canvas>
     </view>
-    <scroll-view scroll-x="true" class="week-forecast">
+    <view class="wxrun-view">
+        <ec-canvas id="wxrun-canvas" canvas-id="wxrunCanvas" ec="{{ wxrunec }}"></ec-canvas>
+    </view>
+    <audio src="{{audiosrc}}" id="myAudio"></audio>
+    <image class="audio-img rotate" src="{{audioImg}}" mode="widthFix" bindtap="audioControl"></image>
+    <!-- <button type="primary" bindtap="audioPlay">播放</button>
+    <button type="primary" bindtap="audioPause">暂停</button> -->
+    <!-- <scroll-view scroll-x="true" class="week-forecast">
         <view class="item"  wx:for="{{week}}">
             <view>
                 <text>{{item.day}}</text>
@@ -31,5 +38,5 @@
                 <text>{{item.temperature}}</text>
             </view>
         </view>
-    </scroll-view>
+    </scroll-view> -->
 </view>

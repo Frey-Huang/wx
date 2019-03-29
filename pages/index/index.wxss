@@ -1,64 +1,22 @@
 @font-face {
-    font-family: 'weather-font';  /* project id 650528 */
-    src: url('//at.alicdn.com/t/font_650528_m5lq7v3y4nr60f6r.eot');
-    src: url('//at.alicdn.com/t/font_650528_m5lq7v3y4nr60f6r.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_650528_m5lq7v3y4nr60f6r.woff') format('woff'),
-    url('//at.alicdn.com/t/font_650528_m5lq7v3y4nr60f6r.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_650528_m5lq7v3y4nr60f6r.svg#weather-font') format('svg');
-  }
-
-  @font-face {font-family: 'siyuanhei';
-    src: url('//at.alicdn.com/t/webfont_ps8ow7hpnuhm2t9.eot'); /* IE9*/
-    src: url('//at.alicdn.com/t/webfont_ps8ow7hpnuhm2t9.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url('//at.alicdn.com/t/webfont_ps8ow7hpnuhm2t9.woff') format('woff'), /* chrome、firefox */
-    url('//at.alicdn.com/t/webfont_ps8ow7hpnuhm2t9.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-    url('//at.alicdn.com/t/webfont_ps8ow7hpnuhm2t9.svg#NotoSansHans-DemiLight') format('svg'); /* iOS 4.1- */
-  }
-text{
-    font-family: 'siyuanhei';
-    text-shadow: -1rpx 0rpx 10rpx rgb(244,243,241),1rpx 0rpx 10rpx rgb(244,243,241);
+    font-family: 'iconfont-sky'; /* project id 1115456 */
+    src: url('//at.alicdn.com/t/font_1115456_v2fjpuzsyh.eot');
+    src: url('//at.alicdn.com/t/font_1115456_v2fjpuzsyh.eot?#iefix')
+            format('embedded-opentype'),
+        url('//at.alicdn.com/t/font_1115456_v2fjpuzsyh.woff2') format('woff2'),
+        url('//at.alicdn.com/t/font_1115456_v2fjpuzsyh.woff') format('woff'),
+        url('//at.alicdn.com/t/font_1115456_v2fjpuzsyh.ttf') format('truetype'),
+        url('//at.alicdn.com/t/font_1115456_v2fjpuzsyh.svg#iconfont-sky')
+            format('svg');
 }
 
 .i-weather-font {
-    font-family: 'weather-font' !important;
+    font-family: 'iconfont-sky' !important;
 }
 
-.height {
-    height: 100%;
-}
 ec-canvas {
     width: 750rpx;
     height: 560rpx;
-}
-.background {
-    background-image: url('https://s14.postimg.cc/ksvigrmip/80lb-_Smooth-_White.jpg');
-    background-size: 100% 100%;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-
-}
-
-.weather-bg {
-    position:absolute;
-    width:100%;
-    height:100%;
-    z-index: -1;
-    opacity: 0.9;
-    overflow: hidden;
-}
-
-.weather-bg-img {
-    width:100%;
-    height: 100%;
-}
-
-.weather-bg-transit {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(rgba(244,243,241,0), rgba(244,243,241,1));
-    position: absolute;
-    top: 0;
 }
 
 .local {
@@ -78,8 +36,9 @@ ec-canvas {
 .tip-icon {
     margin-right: 10rpx;
     vertical-align: bottom;
-    font-size: 55rpx;
+    font-size: 40rpx;
 }
+
 .tip-main-icon {
     vertical-align: bottom;
     font-size: 150rpx;
@@ -87,13 +46,13 @@ ec-canvas {
 .week-forecast {
     white-space: nowrap;
     display: flex;
-    margin-top:40rpx;
+    margin-top: 40rpx;
 }
 .week-forecast .item {
     display: inline-block;
     border-left: 1rpx solid gray;
-    padding:0 10px;
-    text-align:center;
+    padding: 0 10px;
+    text-align: center;
 }
 .week-forecast .item:nth-of-type(1) {
     border-left: none;
@@ -101,8 +60,10 @@ ec-canvas {
 
 .today-temperature {
     text-align: center;
-    font-size: 100rpx;
+    font-size: 80rpx;
     line-height: 1;
+    display: flex;
+    align-items: center;
 }
 
 .today-forecast {
@@ -111,7 +72,7 @@ ec-canvas {
     color: #333;
     margin-bottom: 30rpx;
 }
-.precipitation-view{
+.precipitation-view {
     padding-top: 20rpx;
     box-sizing: border-box;
     border-top: 1px solid #ddd;
@@ -121,139 +82,107 @@ ec-canvas {
     height: 460rpx;
 }
 
+.rotate {
+    display: block;
+    position: relative;
+    -webkit-animation: spin 20s linear infinite;
+    animation: spin 20s linear infinite;
 
-.icon-location:before {
-    content: '\e652';
 }
 
-.icon-temperature:before {
-    content: '\e678';
+@-webkit-keyframes spin {
+    0%   {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    0%   {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+.audio-img{
+    width:400rpx;
+    height: 400rpx;
+    border-radius: 400rpx;
+    margin-top: 110rpx;
+    border: 15rpx solid #000
+}
+.i-weather-font::before {
+    font-size: 50rpx;
+}
+.tip-icon::before {
+    font-size: 30rpx;
+}
+.icon-location::before {
+    content: '\e622';
+}
+.icon-CLOUDY::before {
+    content: '\e638';
+}
+.icon-CLEAR_DAY::before {
+    content: '\e8b6';
+}
+.icon-CLEAR_NIGHT::before {
+    content: '\e8a9';
+}
+.icon-PARTLY_CLOUDY_DAY::before {
+    content: '\e8af';
+}
+.icon-PARTLY_CLOUDY_NIGHT::before {
+    content: '\e8ab';
+}
+.icon-CLOUDY::before {
+    content: '\e8b3';
+}
+.icon-HAZE::before {
+    content: '\e8b9';
 }
 
-.icon-degree:before {
-    content: '\e678';
+.icon-LIGHT_RAIN::before {
+    content: '\e8b4';
 }
-
-.icon-sun:before {
-    content: '\e7b0';
+.icon-MODERATE_RAIN::before {
+    content: '\e8b1';
 }
-
-.icon-moon:before {
-    content: '\e6be';
+.icon-HEAVY_RAIN::before {
+    content: '\e8ae';
 }
-
-.icon-cloud:before {
-    content: '\e6c7';
+.icon-STORM_RAIN::before {
+    content: '\e8ad';
 }
-
-.icon-cloud-night:before {
-    content: '\e645';
+.icon-LIGHT_SNOW::before {
+    content: '\e8ac';
 }
-
-.icon-pm25:before {
-    content: '\e605';
+.icon-MODERATE_SNOW::before {
+    content: '\e8b5';
 }
-
-.icon-rain:before {
-    content: '\e6b5';
+.icon-HEAVY_SNOW::before {
+    content: '\e8b7';
 }
-
-.icon-snow:before {
-    content: '\e600';
+.icon-STORM_SNOW::before {
+    content: '\e8b8';
 }
-
-.icon-wind:before {
-    content: '\e6c5';
+.icon-DUST::before {
+    content: '\e8b0';
 }
-
-.icon-fog:before {
-    content: '\e68c';
+.icon-SAND::before {
+    content: '\e8aa';
 }
-
-.icon-umbrella:before {
-    content: '\e6c4';
-}
-
-.icon-shidu:before {
-    content: "\e682";
-}
-
-.icon-baofengyu-:before {
-    content: "\e6ae";
-}
-
-.icon-feng:before {
-    content: "\e6af";
-}
-
-.icon-duoyun:before {
-    content: "\e6b0";
-}
-
-.icon-baofengyu:before {
-    content: "\e6c0";
-}
-
-.icon-mai:before {
-    content: "\e6b2";
-}
-
-.icon-fengxiangdai:before {
-    content: "\e60b";
-}
-
-.icon-dongtian:before {
-    content: "\e6b4";
-}
-
-.icon-feng-:before {
-    content: "\e6b5";
-}
-
-.icon-mai-:before {
-    content: "\e6b6";
-}
-
-.icon-feng-1:before {
-    content: "\e6b7";
-}
-
-.icon-xue:before {
-    content: "\e6b8";
-}
-
-.icon-qiwen:before {
-    content: "\e6b9";
-}
-
-.icon-qing:before {
-    content: "\e6ba";
-}
-
-.icon-xue-:before {
-    content: "\e6bb";
-}
-
-.icon-qing-:before {
-    content: "\e6bc";
-}
-
-.icon-qiwen-:before {
-    content: "\e6bd";
-}
-
-.icon-yin:before {
-    content: "\e6be";
-}
-
-.icon-yu:before {
-    content: "\e6bf";
-}
-
-.icon-yitian:before {
-    content: "\e6c0";
-}
-
-.icon-yu-:before {
-    content: "\e6c1";
+.icon-WIND::before {
+    content: '\e60f';
 }
