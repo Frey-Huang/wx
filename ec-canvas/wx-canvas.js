@@ -15,14 +15,6 @@ export default class WxCanvas {
     }
   }
 
-  // canvasToTempFilePath(opt) {
-  //   if (!opt.canvasId) {
-  //     opt.canvasId = this.canvasId;
-  //   }
-
-  //   return wx.canvasToTempFilePath(opt, this);
-  // }
-
   setChart(chart) {
     this.chart = chart;
   }

@@ -10,33 +10,29 @@
         <text class="tip-icon i-weather-font icon-location"></text>
         <text>{{locationName}}</text>
     </view>
-    <view class="today-temperature i-weather-font {{weatherIcon}}" >
+    <view class="today-temperature i-weather-font {{weatherIcon}}">
         <text>{{temperature}}</text>
+        <text class='today-humidity'>{{humidity}}</text>
     </view>
     <view class="today-forecast ">
         <text>{{todayForeCast}}</text>
     </view>
-    <view class="precipitation-view" bindtap="reLocation">
-        <ec-canvas id="precipitation-canvas" canvas-id="precipitationCanvas" ec="{{ ec }}"></ec-canvas>
+    <view class="view-date">
+        <view wx:for="{{daily}}" class="view-date-item" wx:key='index'>{{item}}</view>
     </view>
-    <view class="wxrun-view">
-        <ec-canvas id="wxrun-canvas" canvas-id="wxrunCanvas" ec="{{ wxrunec }}"></ec-canvas>
-    </view>
-    <audio src="{{audiosrc}}" id="myAudio"></audio>
-    <image class="audio-img rotate" src="{{audioImg}}" mode="widthFix" bindtap="audioControl"></image>
-    <!-- <button type="primary" bindtap="audioPlay">播放</button>
-    <button type="primary" bindtap="audioPause">暂停</button> -->
-    <!-- <scroll-view scroll-x="true" class="week-forecast">
-        <view class="item"  wx:for="{{week}}">
-            <view>
-                <text>{{item.day}}</text>
-            </view>
-            <view>
-                <text class="i-weather-font {{item.skycon}}"></text>
-            </view>
-            <view>
-                <text>{{item.temperature}}</text>
-            </view>
+    <view class="skycon-view">
+        <view wx:for="{{dailyskycon}}" class="view-skycon-item" wx:key='index'>
+            <text class='view-skycon-item-icon i-weather-font {{item.icon}}'></text>
+            <text class='view-skycon-item-text'>{{item.text}}</text>
         </view>
-    </scroll-view> -->
+    </view>
+    <view class="template-view" bindtap="reLocation">
+        <!-- <canvas type="webgl" id="myCanvas"></canvas> -->
+        <ec-canvas type="2d" id="precipitation-canvas" canvas-id="precipitationCanvas" ec="{{ ec }}"></ec-canvas>
+    </view>
+    <view class="view-humidity">
+        <view wx:for="{{dailyhumidity}}" class="view-humidity-item" wx:key='index'>{{item}}</view>
+    </view>
+
+
 </view>
